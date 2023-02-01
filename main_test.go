@@ -8,9 +8,9 @@ import (
 // 実行したいユニットテスト
 func TestTableDriveParallel(t *testing.T) {
 	// defer文で実行する後処理の記述
-	defer func() {
+	t.Cleanup(func() {
 		fmt.Println("cleanup")
-	}()
+	})
 
 	// 本来のテストの記述
 	tests := []struct {
