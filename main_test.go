@@ -5,29 +5,28 @@ import (
 	"testing"
 )
 
-func setup() {
-	fmt.Println("setup")
-}
-
-func teardown() {
-	fmt.Println("teardown")
-}
-
-func TestMain(m *testing.M) {
-	// 前処理
-	setup()
-
-	m.Run()
-
-	// 後処理
-	teardown()
-}
-
 // 実行したいユニットテスト
-func TestA(t *testing.T) {
-	fmt.Println("testA")
-}
+func TestTableDriveParallel(t *testing.T) {
+	// defer文で実行する後処理の記述
+	defer func() {
+		fmt.Println("cleanup")
+	}()
 
-func TestB(t *testing.T) {
-	fmt.Println("testB")
+	// 本来のテストの記述
+	tests := []struct {
+		testTitle string
+	}{
+		{testTitle: "subtest1"},
+		{testTitle: "subtest2"},
+		{testTitle: "subtest3"},
+	}
+
+	for _, test := range tests {
+		testcase := test
+		t.Run(testcase.testTitle, func(t *testing.T) {
+			// これがあることでサブテストが並列に走る
+			t.Parallel()
+			fmt.Println(testcase.testTitle)
+		})
+	}
 }
